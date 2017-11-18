@@ -852,3 +852,13 @@ json.hpp
 spline.h
 /media/fabiovalerio/Data/udacity_projects/carnd/term_3/CarND-Path-Planning-Project/src/spline.h
 
+/media/fabiovalerio/Data/udacity_projects/carnd/term_3/CarND-Path-Planning-Project/src/spline.h
+cstdio
+-
+cassert
+-
+vector
+-
+algorithm
+-
+

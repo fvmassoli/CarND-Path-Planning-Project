@@ -239,7 +239,7 @@ int main() {
           	vector<double> next_x_vals;
           	vector<double> next_y_vals;
 			
-			double pos_x;
+			/* double pos_x;
 			double pos_y;
 			double angle;
 			int path_size = previous_path_x.size();
@@ -268,6 +268,16 @@ int main() {
 				next_y_vals.push_back(pos_y+(dist_inc)*sin(angle+(i+1)*(pi()/100)));
 				pos_x += (dist_inc)*cos(angle+(i+1)*(pi()/100));
 				pos_y += (dist_inc)*sin(angle+(i+1)*(pi()/100));
+			} */
+
+			double next_d = 6;
+			double dist_inc = 0.5;
+			for(int i = 0; i < 50; i++)
+			{    
+				double next_s = car_s + (i+1)*dist_inc;
+				vector<double> xy = getXY(next_s, next_d, map_waypoints_s, map_waypoints_x, map_waypoints_y);
+				next_x_vals.push_back(xy[0]);
+				next_y_vals.push_back(xy[1]);
 			}
 
 			// TODO: define a path made up of (x,y) points that the car will visit sequentially every 
