@@ -851,6 +851,8 @@ json.hpp
 /media/fabiovalerio/Data/udacity_projects/carnd/term_3/CarND-Path-Planning-Project/src/json.hpp
 spline.h
 /media/fabiovalerio/Data/udacity_projects/carnd/term_3/CarND-Path-Planning-Project/src/spline.h
+vehicle.cpp
+/media/fabiovalerio/Data/udacity_projects/carnd/term_3/CarND-Path-Planning-Project/src/vehicle.cpp
 
 /media/fabiovalerio/Data/udacity_projects/carnd/term_3/CarND-Path-Planning-Project/src/spline.h
 cstdio
@@ -860,5 +862,13 @@ cassert
 vector
 -
 algorithm
+-
+
+/media/fabiovalerio/Data/udacity_projects/carnd/term_3/CarND-Path-Planning-Project/src/vehicle.cpp
+vehicle.h
+/media/fabiovalerio/Data/udacity_projects/carnd/term_3/CarND-Path-Planning-Project/src/vehicle.h
+
+/media/fabiovalerio/Data/udacity_projects/carnd/term_3/CarND-Path-Planning-Project/src/vehicle.h
+vector
 -
 

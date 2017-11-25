@@ -9,6 +9,7 @@
 #include "Eigen-3.3/Eigen/QR"
 #include "json.hpp"
 #include "spline.h"
+#include "vehicle.cpp"
 
 using namespace std;
 
@@ -163,8 +164,10 @@ vector<double> getXY(double s, double d, const vector<double> &maps_s, const vec
 // start in lane 1
 int lane = 1;
 
-// Have a reference velocity to target
+// first value of velocity is 0.0
 double ref_vel = 0.0; //mph
+
+Vehicle vehicle;
 
 int main() {
   uWS::Hub h;
@@ -254,17 +257,18 @@ int main() {
 
 			bool too_close = false;
 			//find ref_v to be used
+			
 			for(int i=0; i<sensor_fusion.size(); i++) {
 				// sensor fusion vector: [id, x, y, vx, vy, s, d]
-				float d = sensor_fusion[1][6];
-				if(d < (2 + (4*lane) + 2) && d > (2 + (4*lane) - 2)) {
-					double vx = sensor_fusion[1][3];
-					double vy = sensor_fusion[1][4];
+				float d = sensor_fusion[i][6];
+				if(d > (2+(4*lane)-2) && d < (2+(4*lane)+2)) {
+					double vx = sensor_fusion[i][3];
+					double vy = sensor_fusion[i][4];
 					double check_speed = sqrt(vx*vx + vy*vy);
-					double check_car_s = sensor_fusion[1][5];
+					double check_car_s = sensor_fusion[i][5];
 
 					check_car_s += ((double)prev_size*.02*check_speed);
-
+					
 					if((check_car_s > car_s) && (check_car_s-car_s < 30)) {
 						//ref_vel = 29.5;
 						too_close = true;
@@ -275,6 +279,8 @@ int main() {
 				}
 			}
 
+			cout << lane << endl;
+
 			if(too_close) {
 				// deceleration of 5 m/s2
 				ref_vel -= .224; 
@@ -282,8 +288,6 @@ int main() {
 				ref_vel += .224; 
 			}
 
-			cout << ref_vel << "  " << too_close << endl;
- 
 			double ref_x = car_x;
 			double ref_y = car_y;
 			double ref_yaw = deg2rad(car_yaw);
