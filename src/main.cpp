@@ -10,6 +10,7 @@
 #include "json.hpp"
 #include "spline.h"
 #include "vehicle.cpp"
+#include "pid.cpp"
 
 using namespace std;
 
@@ -163,14 +164,15 @@ vector<double> getXY(double s, double d, const vector<double> &maps_s, const vec
 
 // start in lane 1
 int lane = 1;
-
-// first value of velocity is 0.0
-double ref_vel = 0.0; //mph
+double ref_vel = 0.0;
 
 Vehicle vehicle;
 
 int main() {
   uWS::Hub h;
+
+  PID vel_control;
+  vel_control.Init(0.005, 0.0, 0.0);
 
   // Load up map values for waypoint's x,y,s and d normalized normal vectors
   vector<double> map_waypoints_x;
@@ -209,6 +211,7 @@ int main() {
   h.onMessage([&map_waypoints_x,
 				&map_waypoints_y,
 				&map_waypoints_s,
+				&vel_control,
 				&map_waypoints_dx,
 				&map_waypoints_dy]
 				(uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
@@ -255,39 +258,19 @@ int main() {
 				car_s = end_path_s;
 			}
 
-			bool too_close = false;
-			//find ref_v to be used
+			// set the vehicle current lane
+			vehicle.SetCurrentLane(lane);
+
+			// set lane to the next lane the car should go
+			int lane = vehicle.GetNextLane(sensor_fusion, prev_size, end_path_s, car_s);
 			
-			for(int i=0; i<sensor_fusion.size(); i++) {
-				// sensor fusion vector: [id, x, y, vx, vy, s, d]
-				float d = sensor_fusion[i][6];
-				if(d > (2+(4*lane)-2) && d < (2+(4*lane)+2)) {
-					double vx = sensor_fusion[i][3];
-					double vy = sensor_fusion[i][4];
-					double check_speed = sqrt(vx*vx + vy*vy);
-					double check_car_s = sensor_fusion[i][5];
-
-					check_car_s += ((double)prev_size*.02*check_speed);
-					
-					if((check_car_s > car_s) && (check_car_s-car_s < 30)) {
-						//ref_vel = 29.5;
-						too_close = true;
-						if(lane > 0) {
-							lane = 0;
-						}
-					}
-				}
-			}
-
-			cout << lane << endl;
-
-			if(too_close) {
-				// deceleration of 5 m/s2
-				ref_vel -= .224; 
-			} else if(ref_vel < 49.5) {
-				ref_vel += .224; 
-			}
-
+			// set the proper refernce speed for the car
+			//double ref_vel = vehicle.GetRefVel();
+			double vel_error = ref_vel - vehicle.speed_limit_;
+            vel_control.UpdateError(vel_error);
+            double new_vel = vel_control.TotalError();
+			ref_vel += new_vel;
+			
 			double ref_x = car_x;
 			double ref_y = car_y;
 			double ref_yaw = deg2rad(car_yaw);
@@ -381,9 +364,7 @@ int main() {
 				next_y_vals.push_back(y_point);
 			}
 
-			// TODO: define a path made up of (x,y) points that the car will visit sequentially every 
-			// .02 seconds
-          	msgJson["next_x"] = next_x_vals;
+			msgJson["next_x"] = next_x_vals;
           	msgJson["next_y"] = next_y_vals;
 
           	auto msg = "42[\"control\","+ msgJson.dump()+"]";

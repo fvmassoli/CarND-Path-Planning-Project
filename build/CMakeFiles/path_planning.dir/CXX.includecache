@@ -853,6 +853,24 @@ spline.h
 /media/fabiovalerio/Data/udacity_projects/carnd/term_3/CarND-Path-Planning-Project/src/spline.h
 vehicle.cpp
 /media/fabiovalerio/Data/udacity_projects/carnd/term_3/CarND-Path-Planning-Project/src/vehicle.cpp
+pid.cpp
+/media/fabiovalerio/Data/udacity_projects/carnd/term_3/CarND-Path-Planning-Project/src/pid.cpp
+
+/media/fabiovalerio/Data/udacity_projects/carnd/term_3/CarND-Path-Planning-Project/src/pid.cpp
+pid.h
+/media/fabiovalerio/Data/udacity_projects/carnd/term_3/CarND-Path-Planning-Project/src/pid.h
+iostream
+-
+chrono
+-
+ctime
+-
+
+/media/fabiovalerio/Data/udacity_projects/carnd/term_3/CarND-Path-Planning-Project/src/pid.h
+chrono
+-
+ctime
+-
 
 /media/fabiovalerio/Data/udacity_projects/carnd/term_3/CarND-Path-Planning-Project/src/spline.h
 cstdio
@@ -867,6 +885,8 @@ algorithm
 /media/fabiovalerio/Data/udacity_projects/carnd/term_3/CarND-Path-Planning-Project/src/vehicle.cpp
 vehicle.h
 /media/fabiovalerio/Data/udacity_projects/carnd/term_3/CarND-Path-Planning-Project/src/vehicle.h
+cmath
+-
 
 /media/fabiovalerio/Data/udacity_projects/carnd/term_3/CarND-Path-Planning-Project/src/vehicle.h
 vector
