@@ -13,7 +13,7 @@ public:
 	int current_lane_;
 	double ref_vel_;
 	double safety_space_ = 30;
-	double speed_limit_ = 49.5;	
+	double speed_limit_ = 70.5;	
 
 	Vehicle();
 
@@ -29,7 +29,7 @@ public:
 
 	void SetCurrentLane(int current_lane);
 
-	double GetRefVel();
+	//double GetRefVel();
 };
 
 

@@ -266,6 +266,14 @@ int main() {
 			
 			// set the proper refernce speed for the car
 			//double ref_vel = vehicle.GetRefVel();
+			/*double speed_limit;
+			if (vehicle.too_close_)
+            {
+              // keeping lane
+              speed_limit = 0.0;
+            } else {
+              speed_limit = vehicle.speed_limit_;
+            }*/
 			double vel_error = ref_vel - vehicle.speed_limit_;
             vel_control.UpdateError(vel_error);
             double new_vel = vel_control.TotalError();

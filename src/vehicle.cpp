@@ -133,7 +133,7 @@ int Vehicle::GetNextLane(vector<vector<double>> sensor_fusion,
 	return next_lane;
 }
 
-double Vehicle::GetRefVel() {
+/*double Vehicle::GetRefVel() {
 
 	
 
@@ -147,5 +147,5 @@ double Vehicle::GetRefVel() {
 
 	return this->ref_vel_;
 
-}
+}*/
 
