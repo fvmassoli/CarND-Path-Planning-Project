@@ -9,7 +9,7 @@
 #include "Eigen-3.3/Eigen/QR"
 #include "json.hpp"
 #include "spline.h"
-#include "vehicle.cpp"
+#include "vehicle2.cpp"
 #include "pid.cpp"
 
 using namespace std;
@@ -164,7 +164,8 @@ vector<double> getXY(double s, double d, const vector<double> &maps_s, const vec
 
 // start in lane 1
 int lane = 1;
-double ref_vel = 0.0;
+
+int counter = 0;
 
 Vehicle vehicle;
 
@@ -252,32 +253,26 @@ int main() {
           	auto sensor_fusion = j[1]["sensor_fusion"];
           	json msgJson;
   
+  			cout << "******************************" << endl;
+  			cout << "********** new cicle: " << counter++ << " *********" << endl;
+  			cout << "******************************" << endl;
+  				
 			int prev_size = previous_path_x.size();
 		
 			if(prev_size > 0) {
 				car_s = end_path_s;
 			}
 
-			// set the vehicle current lane
-			vehicle.SetCurrentLane(lane);
-
 			// set lane to the next lane the car should go
 			int lane = vehicle.GetNextLane(sensor_fusion, prev_size, end_path_s, car_s);
+
+			// set the vehicle current lane
+			vehicle.SetCurrentLane(lane);
 			
-			// set the proper refernce speed for the car
-			//double ref_vel = vehicle.GetRefVel();
-			/*double speed_limit;
-			if (vehicle.too_close_)
-            {
-              // keeping lane
-              speed_limit = 0.0;
-            } else {
-              speed_limit = vehicle.speed_limit_;
-            }*/
-			double vel_error = ref_vel - vehicle.speed_limit_;
+			/*double vel_error = ref_vel - vehicle.speed_limit_;
             vel_control.UpdateError(vel_error);
             double new_vel = vel_control.TotalError();
-			ref_vel += new_vel;
+			ref_vel += new_vel;*/
 			
 			double ref_x = car_x;
 			double ref_y = car_y;
@@ -351,7 +346,7 @@ int main() {
 			for(int i=1; i<=50-previous_path_x.size(); i++) {
 
 				// 2.24 to go from mph to m/s
-				double N = target_dist / (.02*ref_vel/2.24);
+				double N = target_dist / (.02*vehicle.ref_vel_/2.24);
 				
 				double x_point = x_add_on+(target_x)/N;
 				double y_point = s(x_point);

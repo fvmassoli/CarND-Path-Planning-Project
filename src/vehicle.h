@@ -7,13 +7,20 @@ using namespace std;
 
 class Vehicle {
 
+private:
+
+	double check_car_vx;
+	double check_car_vy;
+	double check_car_s;
+	double check_car_d;
+	double check_speed;
+	
 public:
 
-	bool too_close_;
 	int current_lane_;
 	double ref_vel_;
-	double safety_space_ = 30;
-	double speed_limit_ = 70.5;	
+	double safety_space_ = 30.;
+	double speed_limit_ = 49.5;	
 
 	Vehicle();
 
