@@ -253,12 +253,13 @@ int main() {
           	auto sensor_fusion = j[1]["sensor_fusion"];
           	json msgJson;
   
-  			cout << "******************************" << endl;
-  			cout << "********** new cicle: " << counter++ << " *********" << endl;
-  			cout << "******************************" << endl;
   				
 			int prev_size = previous_path_x.size();
 		
+			/* 
+			 * if the previous trajectory has not been exhausted, 
+			 * move the car to its end
+			 */
 			if(prev_size > 0) {
 				car_s = end_path_s;
 			}
@@ -269,6 +270,9 @@ int main() {
 			// set the vehicle current lane
 			vehicle.SetCurrentLane(lane);
 			
+			/* 
+			 * Use PID to get velocity
+			 */
 			/*double vel_error = ref_vel - vehicle.speed_limit_;
             vel_control.UpdateError(vel_error);
             double new_vel = vel_control.TotalError();
@@ -305,6 +309,9 @@ int main() {
 				ptsy.push_back(ref_y);	
 			}
 
+			/*
+			 * Set reference points for the spline
+			 */
 			int next_d = 2 + 4*lane;
 			vector<double> next_wp0 = getXY(car_s+30, next_d, map_waypoints_s, map_waypoints_x, map_waypoints_y);
 			vector<double> next_wp1 = getXY(car_s+60, next_d, map_waypoints_s, map_waypoints_x, map_waypoints_y);
@@ -328,10 +335,16 @@ int main() {
 
 			tk::spline s;
 			s.set_points(ptsx, ptsy);
-
+			
+			/*
+			 * decleare vectors of new trajectory points
+			 */
 			vector<double> next_x_vals;
 			vector<double> next_y_vals;
 			
+			/*
+			 * start filling new trajectory with not used points from previous traject0ry
+			 */
 			for(int i=0; i<previous_path_x.size(); i++) {
 				next_x_vals.push_back(previous_path_x[i]);
 				next_y_vals.push_back(previous_path_y[i]);
@@ -343,6 +356,9 @@ int main() {
 
 			double x_add_on = 0;
 
+			/*
+			 * Fill the trajecoty using points from the spline
+			 */
 			for(int i=1; i<=50-previous_path_x.size(); i++) {
 
 				// 2.24 to go from mph to m/s
